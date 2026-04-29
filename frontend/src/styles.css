@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+/* Optional: Custom scrollbar for a polished chat look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
