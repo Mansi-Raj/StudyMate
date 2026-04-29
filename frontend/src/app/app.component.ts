@@ -10,7 +10,7 @@ import { ChatService } from './services/chat.service';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements AfterViewChecked {
-  title = 'Clariva - AI Study Assistant';
+  title = 'StudyMate - AI Study Assistant';
   userInput: string = '';
   isLoading: boolean = false;
   

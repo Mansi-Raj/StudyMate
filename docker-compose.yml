@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: studymate-mysql
+    restart: always
+    env_file:
+      - .env # Loads your secret MySQL password here!
+    environment:
+      MYSQL_DATABASE: studymate
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: 
+      context: ./studymate-backend # Looks for the Dockerfile in the backend folder
+    container_name: studymate-backend
+    restart: on-failure
+    env_file:
+      - .env # Loads your Gemini Key and MySQL password for Spring Boot!
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+
+  frontend:
+    build: 
+      context: ./frontend # Looks for the Dockerfile in the frontend folder
+    container_name: studymate-frontend
+    restart: always
+    ports:
+      - "4200:80" # Maps Nginx's internal port 80 to your local port 4200
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data: # This ensures your chat history isn't deleted when Docker stops
