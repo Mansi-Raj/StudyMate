@@ -24,7 +24,7 @@ public class ChatMessage {
 
     private LocalDateTime timestamp;
 
-    public void setTimestamp(LocalDateTime now) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

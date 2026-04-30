@@ -22,6 +22,9 @@ services:
     restart: on-failure
     env_file:
       - .env # Loads your Gemini Key and MySQL password for Spring Boot!
+    environment:
+      - DB_HOST=mysql-db    # <--- Tells Spring Boot to connect to the DB container
+      - DB_PORT=3306        # <--- Uses the internal Docker port
     ports:
       - "8080:8080"
     depends_on:
