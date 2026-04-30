@@ -60,8 +60,12 @@ public class ChatService {
                                        .replace("\"", "\\\"")
                                        .replace("\n", "\\n");
 
+        // Updated requestBody to include system instructions
         String requestBody = """
                 {
+                  "systemInstruction": {
+                    "parts": [{"text": "You are StudyMate, a helpful, encouraging, and highly knowledgeable AI study assistant. Your goal is to help the user learn and understand concepts clearly. When a user asks you to explain a topic, provide a comprehensive, well-structured, and easy-to-understand overview. You MUST use Markdown formatting, including bold text, bullet points, and code blocks, to make your answers as readable and engaging as possible."}]
+                  },
                   "contents": [{
                     "parts": [{"text": "%s"}]
                   }]
