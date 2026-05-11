@@ -1,51 +1,36 @@
 <div class="flex flex-col h-screen bg-gray-50">
-  <!-- Header -->
+  
+  <!-- Top Navigation Bar -->
   <header class="flex items-center justify-between px-6 py-4 text-white bg-blue-600 shadow-md">
     <h1 class="text-xl font-bold">{{ title }}</h1>
-    <button 
-      (click)="logout()" 
-      class="px-4 py-2 text-sm text-blue-600 bg-white rounded-md hover:bg-gray-100">
-      Logout
-    </button>
+    <button (click)="logout()" class="px-4 py-2 text-sm text-blue-600 bg-white rounded-md">Logout</button>
   </header>
 
-  <!-- Chat Area (Notice #scrollMe reference) -->
+  <!-- Main Chat Message Container. Linked to @ViewChild('scrollMe') -->
   <main #scrollMe class="flex-1 p-6 overflow-y-auto">
     <div class="space-y-4">
+      
+      <!-- Loops through the messages array. Uses ngClass to conditionally align/color bubbles based on role -->
       <div *ngFor="let msg of messages" 
            [ngClass]="{'ml-auto bg-blue-100': msg.role === 'user', 'bg-white': msg.role === 'ai'}"
            class="p-4 rounded-lg shadow w-fit max-w-[80%]">
         
-        <!-- Use [innerHTML] to render the parsed markdown safely -->
+        <!-- [innerHTML] tells Angular to render the text as actual HTML tags (for our markdown parser) -->
         <div [innerHTML]="msg.content" class="text-gray-800"></div>
-        
       </div>
-
-      <!-- Loading Indicator -->
+      
+      <!-- Typing Indicator, only visible when waiting for backend response -->
       <div *ngIf="isLoading" class="p-4 bg-white rounded-lg shadow w-fit">
         <p class="text-gray-500 italic">StudyMate is typing...</p>
       </div>
     </div>
   </main>
 
-  <!-- Input Area (Notice (ngSubmit)="onSubmit()" mapping) -->
+  <!-- Bottom Input Bar -->
   <footer class="p-4 bg-white border-t">
     <form (ngSubmit)="onSubmit()" class="flex space-x-2 text-black">
-      <input 
-        type="text" 
-        [(ngModel)]="userInput" 
-        name="userInput" 
-        placeholder="Type your message..." 
-        class="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-        autocomplete="off"
-        [disabled]="isLoading"
-      />
-      <button 
-        type="submit" 
-        [disabled]="isLoading"
-        class="px-6 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-700 disabled:bg-blue-300">
-        Send
-      </button>
+      <input type="text" [(ngModel)]="userInput" name="userInput" placeholder="Type your message..." class="flex-1 px-4 py-2 border rounded-full" autocomplete="off" [disabled]="isLoading" />
+      <button type="submit" [disabled]="isLoading" class="px-6 py-2 text-white bg-blue-600 rounded-full disabled:bg-blue-300">Send</button>
     </form>
   </footer>
 </div>

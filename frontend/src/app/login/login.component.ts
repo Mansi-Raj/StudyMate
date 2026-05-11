@@ -7,28 +7,44 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Need FormsModule for ngModel
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
   username = '';
   password = '';
+  isRegistering = false; // A toggle switch to alternate between Login UI and Register UI
   
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  onLogin() {
-    // TODO: Replace this with a real HTTP call to your Spring Boot /api/auth/login endpoint
-    // For now, we are simulating a successful login so you can test the routing guard
-    if (this.username && this.password) {
-      const simulatedJwt = btoa(`${this.username}:fake-jwt-token`);
-      this.authService.setToken(simulatedJwt);
-      
-      // Navigate to the protected chat route
-      this.router.navigate(['/chat']);
-    } else {
+  // Triggered when the user clicks 'Sign In' or 'Sign Up'
+  onSubmit() {
+    // Basic frontend validation
+    if (!this.username || !this.password) {
       alert('Please enter both username and password.');
+      return;
+    }
+
+    const credentials = { username: this.username, password: this.password };
+
+    // Registration Flow
+    if (this.isRegistering) {
+      this.authService.register(credentials).subscribe({
+        next: () => {
+          alert('Registration successful! Please log in.');
+          this.isRegistering = false; // Flip them back to the login view automatically
+        },
+        error: (err) => alert(err.error || 'Registration failed')
+      });
+    } 
+    // Login Flow
+    else {
+      this.authService.login(credentials).subscribe({
+        next: () => this.router.navigate(['/chat']), // On success, redirect to the protected chat route
+        error: () => alert('Invalid username or password')
+      });
     }
   }
 }
